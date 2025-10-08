@@ -1,39 +1,38 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[16]:
+# In[ ]:
 
 
 def wrong_add_function(arg1,arg2):
     '''
     The function takes in two lists of integers, then it adds
     all of arg2 to each item of arg1.
-    
+
     Example:
     > wrong_add_function([1,2,3],[1,1,1])
     > [6,9,12]
-    
+
     whereas the expected correct answer is, [2,3,4]
-    
+
     Parameters
     ----------
     arg1 : list
     list of integers.
     arg2 : list
     list of integers.
-    
+
     Returns
     -------
     arg1 : list
     Elements of arg1, with each element having had the contents of 
     arg2 added to it.
-    
+
     '''
     arg1_index=0
-
     # NOTE: The expected output [2,3,4] for the input ([1,2,3],[1,1,1])
     # implies elementwise addition (arg1[i] + arg2[i]), not adding
-    # the every element in arg2 to each element of arg1.
+    # every element in arg2 to each element of arg1.
     expected_output = [arg1[i] + arg2[i] for i in range(len(arg1))]
     print(f"The correct answer is supposed to be: {expected_output}. This was generated using a list comprehension and is a lot less code than a while loop.\n\n\n")
 
@@ -52,7 +51,8 @@ def wrong_add_function(arg1,arg2):
             arg_2_sum = sum([arg1[arg1_index]+i for i in arg2])
             print(f"arg_2_sum = {arg_2_sum}")
         arg1[arg1_index]=arg_2_sum  
-        arg1_index+=1 
+        arg1_index+=1
+    print(f"Finished with wrong_add_function: arg1={arg1}")
     return arg1
 
 
@@ -60,26 +60,26 @@ def correct_add_function(arg1,arg2):
     '''
     The function takes in two lists of integers, then it adds
     all of arg2 to each item of arg1.
-    
+
     Example:
       > wrong_add_function([1,2,3],[1,1,1])
       > [6,9,12]
-    
+
     whereas the expected correct answer is, [2,3,4]
-    
+
     Parameters
     ----------
     arg1 : list
       list of integers.
     arg2 : list
       list of integers.
-    
+
     Returns
     -------
     arg1 : list
       Elements of arg1, with each element having had the contents of 
       arg2 added to it.
-    
+
     '''
     arg1_index=0
 
@@ -94,7 +94,7 @@ def correct_add_function(arg1,arg2):
         # expected_output = [arg1[i] + arg2[i] for i in range(len(arg1))]
         # print(f"The correct answer is supposed to be: {expected_output}. This was generated using a list comprehension and is a lot less code than a while loop.\n\n\n")
     # ******************************
-    
+
     return arg1
 
 arg1 = [1,2,3]
@@ -107,7 +107,7 @@ arg2 = [1,1,1]
 correct_add_function(arg1, arg2)
 
 
-# In[62]:
+# In[13]:
 
 
 #%% try, except
@@ -139,11 +139,11 @@ def q2_wrong_add_function(arg1,arg2):
    '''
    The function takes in two lists of integers, then it adds
    all of arg2 to each item of arg1.
-   
+
    Example:
       > wrong_add_function([1,2,3],[1,1,1])
       > [4,5,6]
-   
+
    If the lists are lists of strings, concatenate them
    Example:
       > wrong_add_function(['1','2','3'],['1','1','1'])
@@ -192,15 +192,68 @@ def q2_wrong_add_function(arg1,arg2):
          return arg1
 
 def exception_add_function(arg1, arg2):
+    '''
+    The function takes in two lists of integers, 
+    first varifies both arg's are lists
+    second checks to see if the elements in the arg's are integers and then prints what elements are not integers
+
+    If both lists contain only integers the try statement does no raise an exception and calls q2_wrong_add_function(arg1,arg2).
+       This allows for the q2_wrong_add_function(arg1,arg2) to execute the int portion of its code
+    Otherwise a TypeError is raised
+       If the arg's are lists the user is told this and the code returns without executing any more functions.
+       If there are more than just integers in the arg's the user is notified of the location of these elements
+           as a warning but the code is allowed to continue executing and calls correction_add_function(arg1, arg2).
+
+    Example:
+      > exception_add_function([1,2,3],[1,1,1])
+      > returns q2_wrong_add_function([1,2,3],[1,1,1])
+
+    If the lists are lists have anything other than ints, User is warned but code continues
+    Example:
+      > exception_add_function(['1','2','3'],['1','1','1'])
+      > *****************************************************
+      > The first argument passed to this function at element 0 is not of the expected type. Please check this and rerun the code.
+      > *****************************************************
+      > *****************************************************
+      > The first argument passed to this function at element 1 is not of the expected type. Please check this and rerun the code.
+      > *****************************************************
+      > etc....
+      > The function then calls correction_add_function(arg1, arg2) 
+
+    Parameters
+    ----------
+    arg1 : list
+      list of integers.
+    arg2 : list
+      list of integers.
+
+    Returns
+    -------
+    if either arg's isn't a list nothing is returned and user is informed "Both variables that are passed as arguments must of type list for q2_wrong_add_function() to execute."
+
+    if arg's contain all int's returns q2_wrong_add_function(arg1, arg2)
+
+    if arg's are lists but have anything other than int's in them:
+        1. User is given warning about where there are elements other than lists within each argument
+        2. returns correction_add_function(arg1, arg2)
+
+    '''
     try:
-        #checks to see all values are integers and if not raises a type error otherwise if all are integers it goes straight to q2_wrong_add_function
+        if type(arg1) != list or type(arg2) != list:
+            raise TypeError
+
+        #checks to see if all values are integers and if not raises a type error otherwise if all are integers it goes straight to q2_wrong_add_function
         if not sum([type(i)==int for i in arg1])==len(arg1) or not sum([type(i)==int for i in arg2])==len(arg2):
             raise TypeError
         else:
             return q2_wrong_add_function(arg1,arg2)
-    
+
     except TypeError:
-        #specifies where theere are elements taht are not integers in the first argument
+        if type(arg1) != list or type(arg2) != list:
+            print("Both variables that are passed as arguments must of type list for q2_wrong_add_function() to execute.")
+            return 
+
+        #specifies where there are elements that are not integers in the first argument
         for i, element in enumerate(arg1):
             if type(element) != int:
                 print("*****************************************************")
@@ -215,15 +268,55 @@ def exception_add_function(arg1, arg2):
         return correction_add_function(arg1, arg2)
 
 def correction_add_function(arg1, arg2):
+    '''
+    The function takes in two lists, 
+    first double checks to make sure the arg's only contain ints
+    second if there are elements that are other than int's a ValueError is raised
+
+    The ValueError is handled by converting all of the elements to strings regardless of types then calls return q2_wrong_add_function(arg_str_1,arg_str_2)
+        This ensures all elements of the lists are strings and the "strings portion" of q2_wrong_add_function(arg1,arg2) is entered and the lists are processed accordingly.
+
+    Example:
+      > correction_add_function([1,2,3],[1,1,1])
+      > returns q2_wrong_add_function([1,2,3],[1,1,1])
+
+    If the lists contain anything other than ints, all elements in all lists are converted to strings and then the q2_wrong_add_function(arg1,arg2) is called.
+
+    Example:
+      > correction_add_function(["5","2",3],[1,1,1])
+      > prints:
+        The first argument passed at [2] type was a <class 'int'>.
+        The first argument passed at [2] type is now a <class 'str'>, value = 3
+        The second argument passed at [0] type was a  <class 'int'>.
+        The second argument passed at [0] type is now a <class 'str'>, value = 1
+        The second argument passed at [1] type was a  <class 'int'>.
+        The second argument passed at [1] type is now a <class 'str'>, value = 1
+        The second argument passed at [2] type was a  <class 'int'>.
+        The second argument passed at [2] type is now a <class 'str'>, value = 1
+
+      > The function then returns q2_wrong_add_function(arg1,arg2), thus all elements in both arg's have to be strings and the string portion of the q2_wrong_add_function(arg1,arg2) will run.
+
+    Parameters
+    ----------
+    arg1 : list
+      list of integers.
+    arg2 : list
+      list of integers.
+
+    Returns
+    -------
+    q2_wrong_add_function(arg1,arg2)
+
+    '''
     try:
         #Checks to see if all elements are integers and if so calls q2_wrong_add_function and aborts the rest of the this function
         if sum([type(i)==int for i in arg1])==len(arg1) and sum([type(i)==int for i in arg2])==len(arg2):
             return q2_wrong_add_function(arg1,arg2)
-        
+
         #Checks to see if any of the elements are not strings, raises an error if there are and goes to the except statement 
         if not sum([type(i)==str for i in arg1])==len(arg1) or not sum([type(i)==str for i in arg2])==len(arg2):
             raise ValueError
-            
+
     except ValueError:
         #converts any element in arg1 that is not a str to a string
         for i, element in enumerate(arg1):
@@ -231,7 +324,7 @@ def correction_add_function(arg1, arg2):
                 print(f"The first argument passed at [{i}] type was a {type(arg1[i])}.")
                 arg1[i] = str(arg1[i])
                 print(f"The first argument passed at [{i}] type is now a {type(arg1[i])}, value = {arg1[i]}")
-        
+
         #converts any element in arg2 that is not a str to a string
         for i, element in enumerate(arg2):
             if type(element) != str:
@@ -239,10 +332,10 @@ def correction_add_function(arg1, arg2):
                 arg2[i] = str(arg2[i])
                 print(f"The second argument passed at [{i}] type is now a {type(arg2[i])}, value = {arg2[i]}")
         #after all the integers have been converted q2_wrong_add_function is called so it will enter the "string section"
-        return q2_wrong_add_function(arg_str_1,arg_str_2)
+        return q2_wrong_add_function(arg1,arg2)
 
-arg_str_1=[1,2,3]
-arg_str_2=[1,1,"1"]
+arg_str_1=[5,2,3]
+arg_str_2=[1,1,1]
 
 exception_add_function(arg_str_1,arg_str_2)
 
